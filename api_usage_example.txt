@@ -1,0 +1,58 @@
+Canadian Address Validation API
+
+Base URL:
+http://127.0.0.1:5000
+
+Health check:
+GET /health
+
+Example response:
+{
+  "status": "ok"
+}
+
+Validate an address:
+POST /validate
+Content-Type: application/json
+
+Example request body:
+{
+  "line1": "111 Wellington St",
+  "line2": "",
+  "city": "Ottawa",
+  "province": "ON",
+  "postal_code": "K1A 0A9"
+}
+
+Successful response example:
+{
+  "is_valid": true,
+  "errors": [],
+  "normalized_address": {
+    "line1": "111 Wellington St",
+    "line2": "",
+    "city": "Ottawa",
+    "province": "ON",
+    "postal_code": "K1A 0A9"
+  }
+}
+
+Failure response example:
+{
+  "is_valid": false,
+  "errors": [
+    "Postal code prefix 'V' is not valid for province code 'ON'. Expected one of: K, L, M, N, P."
+  ],
+  "normalized_address": {
+    "line1": "111 Wellington St",
+    "line2": "",
+    "city": "Ottawa",
+    "province": "ON",
+    "postal_code": "V1A 0A9"
+  }
+}
+
+How to call with curl:
+curl -X POST http://127.0.0.1:5000/validate ^
+  -H "Content-Type: application/json" ^
+  -d "{\"line1\":\"111 Wellington St\",\"city\":\"Ottawa\",\"province\":\"ON\",\"postal_code\":\"K1A 0A9\"}"
